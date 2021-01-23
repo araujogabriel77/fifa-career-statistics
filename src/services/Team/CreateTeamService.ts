@@ -1,3 +1,5 @@
+import { getCustomRepository } from 'typeorm';
+
 import Team from '../../models/Team';
 import TeamRepository from '../../repositories/TeamsRepository';
 
@@ -5,30 +7,28 @@ interface Request {
     name: string;
     short_name: string;
     country: string;
-    foundation_year: string;
+    foundation: string;
 }
 
 class CreateTeamService {
 
-    private teamRepository: TeamRepository;
+    public async execute({ name, short_name, country, foundation }: Request): Promise<Team> {
+        const teamRepository = getCustomRepository(TeamRepository);
 
-    constructor(teamRepository: TeamRepository) {
-        this.teamRepository = teamRepository;
-    }
-
-    public execute({ name, short_name, country, foundation_year }: Request): Team {
-        const findTeamWithSameName = this.teamRepository.findByName(name);
+        const findTeamWithSameName = await teamRepository.findByName(name);
 
         if (findTeamWithSameName) {
             throw new Error('This team already exists');
         }
 
-        const team = this.teamRepository.create({
+        const team = teamRepository.create({
             name,
             short_name,
             country,
-            foundation_year
+            foundation
         });
+
+        await teamRepository.save(team);
 
         return team;
     }

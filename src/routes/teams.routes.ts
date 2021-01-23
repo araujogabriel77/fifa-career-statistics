@@ -1,34 +1,34 @@
 import { Router } from 'express';
+import { getCustomRepository } from 'typeorm';
 
-import CreateTeamService from '../services/Team/CreateTeamService';
 import TeamRepository from '../repositories/TeamsRepository';
+import CreateTeamService from '../services/Team/CreateTeamService';
 
 const teamRouter = Router();
-const teamRepository = new TeamRepository();
 
-teamRouter.get('/', (request, response) => {
-    const teams = teamRepository.all();
+teamRouter.get('/', async (request, response) => {
+    const teamRepository = getCustomRepository(TeamRepository);
+    const teams = await teamRepository.find();
 
     return response.json(teams);
 });
 
-teamRouter.post('/', (request, response) => {
+teamRouter.post('/', async (request, response) => {
     try {
         const {
             name,
             short_name,
             country,
-            foundation_year
+            foundation
         } = request.body;
 
+        const createTeam = new CreateTeamService();
 
-        const createTeam = new CreateTeamService(teamRepository);
-
-        const team = createTeam.execute({
+        const team = await createTeam.execute({
             name,
             short_name,
             country,
-            foundation_year
+            foundation
         });
 
         return response.json(team);
