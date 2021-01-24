@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
 
 export default class CreateTeam1611367756363 implements MigrationInterface {
 
@@ -33,13 +33,39 @@ export default class CreateTeam1611367756363 implements MigrationInterface {
                         name: 'foundation',
                         type: 'varchar',
                         isNullable: false
+                    },
+                    {
+                        name: 'user_id',
+                        type: 'uuid',
+                        isNullable: true,
+                    },
+                    {
+                        name: 'created_at',
+                        type: 'timestamp',
+                        default: 'now()'
+                    },
+                    {
+                        name: 'updated_at',
+                        type: 'timestamp',
+                        default: 'now()'
                     }
                 ]
             })
         );
+
+        await queryRunner.createForeignKey('teams',
+            new TableForeignKey({
+                name: 'TeamOwner',
+                columnNames: ['user_id'],
+                referencedColumnNames: ['id'],
+                referencedTableName: 'users',
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE'
+            }));
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropForeignKey('teams', 'TeamOwner');
         await queryRunner.dropTable('teams');
     }
 

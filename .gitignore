@@ -16,6 +16,11 @@ tmp
 # Build
 public/css/main.css
 
+# Temporary
+tmp/
+tmp/*
+!tmp/.gitkeep
+
 # Coverage reports
 coverage
 

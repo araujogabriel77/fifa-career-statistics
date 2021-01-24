@@ -4,39 +4,42 @@ import { getCustomRepository } from 'typeorm';
 import TeamRepository from '../repositories/TeamsRepository';
 import CreateTeamService from '../services/Team/CreateTeamService';
 
-const teamRouter = Router();
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
-teamRouter.get('/', async (request, response) => {
+const teamsRouter = Router();
+
+teamsRouter.use(ensureAuthenticated);
+
+teamsRouter.get('/', async (request, response) => {
+
     const teamRepository = getCustomRepository(TeamRepository);
     const teams = await teamRepository.find();
 
     return response.json(teams);
 });
 
-teamRouter.post('/', async (request, response) => {
-    try {
-        const {
-            name,
-            short_name,
-            country,
-            foundation
-        } = request.body;
+teamsRouter.post('/', async (request, response) => {
+    const {
+        name,
+        short_name,
+        country,
+        foundation,
+        user_id
+    } = request.body;
 
-        const createTeam = new CreateTeamService();
+    const createTeam = new CreateTeamService();
 
-        const team = await createTeam.execute({
-            name,
-            short_name,
-            country,
-            foundation
-        });
+    const team = await createTeam.execute({
+        name,
+        short_name,
+        country,
+        foundation,
+        user_id
+    });
 
-        return response.json(team);
-    } catch (error) {
-        return response.status(400).json({ error: error.message });
-    }
+    return response.json(team);
 
 });
 
 
-export default teamRouter;
+export default teamsRouter;
