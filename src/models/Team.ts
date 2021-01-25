@@ -27,6 +27,9 @@ class Team {
     foundation: string;
 
     @Column()
+    shield: string;
+
+    @Column()
     user_id: string;
 
     @ManyToOne(() => User)

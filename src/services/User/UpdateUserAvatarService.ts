@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import path from 'path';
 import fs from 'fs';
-import uploadConfig from '../../config/upload';
+import uploadConfig from '../../config/uploadAvatar';
 
 import User from '../../models/User';
 import AppError from '../../errors/AppErrors';
@@ -22,7 +22,7 @@ class updateUserAvatarService {
         }
 
         if (user.avatar) {
-            const userAvatarFilePath = path.join(uploadConfig.directory, user.avatar);
+            const userAvatarFilePath = path.join(uploadConfig.directory.avatar, user.avatar);
 
             const avatarFileExists = await fs.promises.stat(userAvatarFilePath);
 

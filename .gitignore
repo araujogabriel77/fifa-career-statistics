@@ -19,7 +19,8 @@ public/css/main.css
 # Temporary
 tmp/
 tmp/*
-!tmp/.gitkeep
+!tmp/.
+todo
 
 # Coverage reports
 coverage

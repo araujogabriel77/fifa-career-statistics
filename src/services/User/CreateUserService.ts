@@ -24,6 +24,10 @@ class CreateUserService {
 
         const hashedPassword = await hash(password, 12);
 
+        if (name.length < 3) {
+            throw new AppError('Username must be at least 3 characters');
+        }
+
         const user = userRepository.create({
             name,
             email,
