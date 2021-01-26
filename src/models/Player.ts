@@ -35,7 +35,7 @@ class Player {
     goals: number;
 
     @Column()
-    assistis: number;
+    assists: number;
 
     @Column()
     clean_sheets: number;
