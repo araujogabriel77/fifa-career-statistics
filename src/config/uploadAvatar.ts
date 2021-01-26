@@ -13,10 +13,15 @@ export default {
     storage: multer.diskStorage({
         destination: tmpFolder.avatar,
         filename(request, file, callback) {
-            const fileHash = crypto.randomBytes(10).toString('hex');
-            const fileName = `${fileHash}-${file.originalname}`;
+            try {
+                const fileHash = crypto.randomBytes(10).toString('hex');
+                const fileName = `${fileHash}-${file.originalname}`;
 
-            return callback(null, fileName);
+                return callback(null, fileName);
+            } catch (error) {
+                callback(error, error.message);
+            }
+
         }
     })
 }

@@ -1,7 +1,7 @@
 {
   "name": "player_season_stats",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./src/server.ts",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
@@ -11,7 +11,6 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "date-fns": "^2.16.1",
-    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^8.5.1",

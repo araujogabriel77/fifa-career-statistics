@@ -1,4 +1,9 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
+import {
+    MigrationInterface,
+    QueryRunner,
+    Table,
+    TableForeignKey
+} from "typeorm";
 
 export default class CreateTeam1611367756363 implements MigrationInterface {
 
@@ -17,27 +22,23 @@ export default class CreateTeam1611367756363 implements MigrationInterface {
                     {
                         name: 'name',
                         type: 'varchar',
-                        isNullable: false
+                        isUnique: true
                     },
                     {
                         name: 'short_name',
                         type: 'varchar',
-                        isNullable: false
                     },
                     {
                         name: 'country',
                         type: 'varchar',
-                        isNullable: false
                     },
                     {
                         name: 'foundation',
                         type: 'varchar',
-                        isNullable: false
                     },
                     {
                         name: 'user_id',
-                        type: 'uuid',
-                        isNullable: true,
+                        type: 'uuid'
                     },
                     {
                         name: 'created_at',

@@ -12,7 +12,7 @@ import User from './User';
 @Entity('teams')
 class Team {
     @PrimaryGeneratedColumn('increment')
-    id: string;
+    id: number;
 
     @Column()
     name: string;

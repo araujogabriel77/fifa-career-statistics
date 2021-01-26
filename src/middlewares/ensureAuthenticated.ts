@@ -31,7 +31,5 @@ export default function ensureAuthenticated(
         id: sub,
     };
 
-    console.log(sub);
-
     return next();
 }
