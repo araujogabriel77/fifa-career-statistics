@@ -17,16 +17,6 @@ export default {
             const fileHash = crypto.randomBytes(10).toString('hex');
             const fileName = `${fileHash}-${file.originalname}`;
 
-            // const fullFilePathName = path.join(tmpFolder.shield, fileHash);
-
-            // request.on('aborted', () => {
-            //     file.stream.on('end', () => {
-            //         console.log('Cancel the upload')
-            //         callback(new Error('Cancel.'), fileName);
-            //     });
-            //     file.stream.emit('end');
-            // });
-
             return callback(null, fileName);
         }
     }),
