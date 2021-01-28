@@ -3,7 +3,7 @@ import { getRepository, Repository } from 'typeorm';
 import ICreatePlayerDTO from '@modules/players/dtos/ICreatePlayerDTO';
 import IPlayersRepository from '@modules/players/repositories/IPlayersRepository';
 
-import Player from '@modules/players/infra/typeorm/entities/Player';
+import Player from '../entities/Player';
 
 class PlayerRepository implements IPlayersRepository {
     private ormRepository: Repository<Player>;

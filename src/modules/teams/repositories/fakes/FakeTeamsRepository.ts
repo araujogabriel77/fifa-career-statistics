@@ -1,16 +1,10 @@
-import { getRepository, Repository } from 'typeorm';
-
 import ITeamsRepository from '@modules/teams/repositories/ITeamsRepository';
 import ICreateTeamDTO from '@modules/teams/dtos/ICreateTeamDTO';
 
-import Team from '../entities/Team';
+import Team from '@modules/teams/infra/typeorm/entities/Team';
 
 class TeamRepository implements ITeamsRepository {
-    private ormRepository: Repository<Team>;
-
-    constructor() {
-        this.ormRepository = getRepository(Team);
-    }
+    private teams: Team[] = [];
 
     public async create({
         name,
@@ -20,7 +14,10 @@ class TeamRepository implements ITeamsRepository {
         shield,
         user_id
     }: Omit<ICreateTeamDTO, 'id'>): Promise<Team> {
-        const team = this.ormRepository.create({
+        const team = new Team();
+
+        Object.assign(team, {
+            id: Math.random() * (200 - 10) + 10,
             name,
             short_name,
             country,
@@ -29,43 +26,35 @@ class TeamRepository implements ITeamsRepository {
             user_id
         });
 
-        await this.ormRepository.save(team);
+        this.teams.push(team);
 
         return team;
     }
 
     public async save(team: Team): Promise<Team> {
-        await this.ormRepository.save(team);
+        this.teams.push(team);
 
         return team;
     }
 
     public async findAll(): Promise<Team[] | undefined> {
-        const teams = await this.ormRepository.find();
-
-        return teams || undefined;
+        return this.teams;
     }
 
     public async findByCountry(country: string): Promise<Team[] | undefined> {
-        const findTeamsWithSameCountry = await this.ormRepository.find({
-            where: { country }
-        });
+        const teams = this.teams.filter(team => team.country === country);
 
-        return findTeamsWithSameCountry || undefined;
+        return teams;
     }
 
     public async findByName(name: string): Promise<Team | undefined> {
-        const findTeamWithSameName = await this.ormRepository.findOne({
-            where: { name }
-        })
+        const team = this.teams.find(team => team.name === name);
 
-        return findTeamWithSameName || undefined;
+        return team;
     }
 
     public async findById(id: number): Promise<Team | undefined> {
-        const team = await this.ormRepository.findOne({
-            where: { id }
-        });
+        const team = this.teams.find(team => team.id === id);
 
         return team;
     }
