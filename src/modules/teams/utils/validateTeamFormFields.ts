@@ -12,8 +12,8 @@ export default function validateTeamFormFields({
     foundation
 }: FormFields): string | null {
 
-    if (name.length < 3) {
-        return 'Team name must have at least 3 characters';
+    if (name.length < 3 || name.length > 40) {
+        return 'Team name must have between 3 and 40 characters';
     }
 
     if (short_name.length > 3 || short_name.length < 2) {

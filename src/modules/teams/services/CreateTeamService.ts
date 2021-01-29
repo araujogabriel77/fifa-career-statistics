@@ -1,9 +1,6 @@
-import { getRepository } from 'typeorm';
 import { injectable, inject } from 'tsyringe';
 
 import Team from '@modules/teams/infra/typeorm/entities/Team';
-import User from '@modules/users/infra/typeorm/entities/User';
-
 import ITeamsRepository from '../repositories/ITeamsRepository';
 
 import AppError from '@shared/errors/AppErrors';
@@ -32,19 +29,9 @@ class CreateTeamService {
         user_id,
         shieldFileName
     }: IRequest): Promise<Team> {
-        const userRepository = getRepository(User);
+        const formatedName = name.toLowerCase();
 
-        const checkUserId = await userRepository.findOne({
-            where: {
-                id: user_id
-            }
-        });
-
-        if (!checkUserId) {
-            throw new AppError('Only authenticated users can create teams');
-        }
-
-        const findTeamWithSameName = await this.teamsRepository.findByName(name);
+        const findTeamWithSameName = await this.teamsRepository.findByName(formatedName);
 
         if (findTeamWithSameName) {
             throw new AppError('This name is already in use');

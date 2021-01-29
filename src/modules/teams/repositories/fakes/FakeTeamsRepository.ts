@@ -17,7 +17,7 @@ class TeamRepository implements ITeamsRepository {
         const team = new Team();
 
         Object.assign(team, {
-            id: Math.random() * (200 - 10) + 10,
+            id: Math.round(Math.random() * (200 - 10) + 10),
             name,
             short_name,
             country,
@@ -32,7 +32,9 @@ class TeamRepository implements ITeamsRepository {
     }
 
     public async save(team: Team): Promise<Team> {
-        this.teams.push(team);
+        const teamIndex = this.teams.findIndex(findTeam => findTeam.id === team.id);
+
+        this.teams[teamIndex] = team;
 
         return team;
     }

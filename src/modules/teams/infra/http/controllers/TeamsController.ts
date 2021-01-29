@@ -11,66 +11,82 @@ import UpdateTeamShieldService from '@modules/teams/services/UpdateTeamShieldSer
 
 export default class TeamsController {
     public async create(request: Request, response: Response): Promise<Response> {
-        const createTeam = container.resolve(CreateTeamService);
+        try {
+            const createTeam = container.resolve(CreateTeamService);
 
-        const {
-            name,
-            short_name,
-            country,
-            foundation,
-        } = request.body;
+            const {
+                name,
+                short_name,
+                country,
+                foundation,
+            } = request.body;
 
-        const user_id = request.user.id;
-        const shield = request.file.filename;
+            const user_id = request.user.id;
+            const shield = request.file.filename;
 
-        const team = await createTeam.execute({
-            name,
-            short_name,
-            country,
-            foundation,
-            user_id,
-            shieldFileName: shield
-        });
+            const team = await createTeam.execute({
+                name,
+                short_name,
+                country,
+                foundation,
+                user_id,
+                shieldFileName: shield
+            });
 
-        return response.json(team);
+            return response.json(team);
+        } catch (error) {
+            return response.json({ error: error.message });
+        }
     }
 
     public async update(request: Request, response: Response): Promise<Response> {
-        const updateTeam = container.resolve(UpdateTeamService);
+        try {
+            const updateTeam = container.resolve(UpdateTeamService);
 
-        const {
-            name,
-            short_name,
-            country,
-            foundation
-        } = request.body;
+            const {
+                name,
+                short_name,
+                country,
+                foundation
+            } = request.body;
 
-        const team = await updateTeam.execute({
-            name,
-            short_name,
-            country,
-            foundation,
-            team_id: request.params.id,
-        });
+            const team = await updateTeam.execute({
+                name,
+                short_name,
+                country,
+                foundation,
+                team_id: request.params.id,
+            });
 
-        return response.json(team);
+            return response.json(team);
+        } catch (error) {
+            return response.json({ error: error.message });
+        }
     }
 
     public async index(request: Request, response: Response): Promise<Response> {
-        const teamsRepository = new TeamsRepository();
-        const teams = await teamsRepository.findAll();
+        try {
+            const teamsRepository = new TeamsRepository();
+            const teams = await teamsRepository.findAll();
 
-        return response.json(teams);
+            return response.json(teams);
+        } catch (error) {
+            return response.json({ error: error.message });
+        }
     }
 
     public async listByCountry(request: Request, response: Response): Promise<Response> {
-        const teamsRepository = new TeamsRepository();
-        const { country } = request.params;
+        try {
+            const teamsRepository = new TeamsRepository();
+            const { country } = request.params;
 
-        const formated_country = country.toLowerCase();
+            const formated_country = country.toLowerCase();
 
-        const teams = await teamsRepository.findByCountry(formated_country)
+            const teams = await teamsRepository.findByCountry(formated_country)
 
-        return response.json(teams);
+            return response.json(teams);
+        } catch (error) {
+            return response.json({ error: error.message });
+        }
     }
 }

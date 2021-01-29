@@ -5,14 +5,18 @@ import UpdateTeamShieldService from '@modules/teams/services/UpdateTeamShieldSer
 
 export default class TeamsController {
     public async update(request: Request, response: Response): Promise<Response> {
-        const updateTeamShield = container.resolve(UpdateTeamShieldService);
+        try {
+            const updateTeamShield = container.resolve(UpdateTeamShieldService);
 
-        const team = await updateTeamShield.execute({
-            team_id: request.params.id,
-            shieldFileName: request.file.filename
-        });
+            const team = await updateTeamShield.execute({
+                team_id: request.params.id,
+                shieldFileName: request.file.filename
+            });
 
-        return response.json(team);
+            return response.json(team);
+        } catch (error) {
+            return response.json({ error: error.message });
+        }
+
     }
-
 }

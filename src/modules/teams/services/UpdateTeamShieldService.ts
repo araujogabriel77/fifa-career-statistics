@@ -31,7 +31,7 @@ class updateUserAvatarService {
             throw new AppError('Team not found', 401);
         }
 
-        if (team.shield && shieldFileName.length > 3) {
+        if (team.shield) {
             const teamShieldFilePath = path.join(uploadConfig.directory.shield, team.shield);
 
             const shieldFileExists = await fs.promises.stat(teamShieldFilePath);
@@ -40,6 +40,8 @@ class updateUserAvatarService {
                 await fs.promises.unlink(teamShieldFilePath);
             }
         }
+        team.shield = shieldFileName;
+
         await this.teamsRepository.save(team);
 
         return team;

@@ -1,10 +1,9 @@
 import { getRepository, Repository } from 'typeorm';
 
+import Team from '../entities/Team'
+    ;
 import ITeamsRepository from '@modules/teams/repositories/ITeamsRepository';
 import ICreateTeamDTO from '@modules/teams/dtos/ICreateTeamDTO';
-
-import Team from '../entities/Team';
-
 class TeamRepository implements ITeamsRepository {
     private ormRepository: Repository<Team>;
 
