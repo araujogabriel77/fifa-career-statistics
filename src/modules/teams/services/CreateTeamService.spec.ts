@@ -28,10 +28,8 @@ describe('CreateTeam', () => {
         const fakeTeamsRepository = new FakeTeamsRepository();
         const createTeam = new CreateTeamService(fakeTeamsRepository);
 
-        const teamName = 'Manchester United'
-
-        await createTeam.execute({
-            name: teamName,
+        const createdTeam = await createTeam.execute({
+            name: 'Manchester United',
             short_name: randomString(3),
             country: randomString(7),
             foundation: '1898',
@@ -40,7 +38,7 @@ describe('CreateTeam', () => {
 
         expect(
             createTeam.execute({
-                name: teamName,
+                name: createdTeam.name,
                 short_name: randomString(3),
                 country: randomString(7),
                 foundation: '1898',
@@ -49,7 +47,7 @@ describe('CreateTeam', () => {
         ).rejects.toBeInstanceOf(AppError);
     });
 
-    it('should not be able to create a team with invalid invalid characters size', async () => {
+    it('should not be able to create a team with invalid characters size', async () => {
         const fakeTeamsRepository = new FakeTeamsRepository();
         const createTeam = new CreateTeamService(fakeTeamsRepository);
 

@@ -42,7 +42,7 @@ class TeamRepository implements ITeamsRepository {
     public async findAll(): Promise<Team[] | undefined> {
         const teams = await this.ormRepository.find();
 
-        return teams || undefined;
+        return teams;
     }
 
     public async findByCountry(country: string): Promise<Team[] | undefined> {
@@ -50,7 +50,7 @@ class TeamRepository implements ITeamsRepository {
             where: { country }
         });
 
-        return findTeamsWithSameCountry || undefined;
+        return findTeamsWithSameCountry;
     }
 
     public async findByName(name: string): Promise<Team | undefined> {
@@ -58,7 +58,7 @@ class TeamRepository implements ITeamsRepository {
             where: { name }
         })
 
-        return findTeamWithSameName || undefined;
+        return findTeamWithSameName;
     }
 
     public async findById(id: number): Promise<Team | undefined> {

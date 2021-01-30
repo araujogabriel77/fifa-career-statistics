@@ -1,10 +1,7 @@
 import { injectable, inject } from 'tsyringe';
 
-import path from 'path';
-import fs from 'fs';
-import uploadConfig from '@config/uploadShield';
-
 import ITeamsRepository from '../repositories/ITeamsRepository';
+import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import Team from '@modules/teams/infra/typeorm/entities/Team';
 import AppError from '@shared/errors/AppErrors';
 
@@ -17,7 +14,10 @@ interface Request {
 class updateUserAvatarService {
     constructor(
         @inject('TeamsRepository')
-        private teamsRepository: ITeamsRepository
+        private teamsRepository: ITeamsRepository,
+
+        @inject('StorageProvider')
+        private storageProvider: IStorageProvider
     ) { }
     public async execute({
         team_id,
@@ -32,15 +32,11 @@ class updateUserAvatarService {
         }
 
         if (team.shield) {
-            const teamShieldFilePath = path.join(uploadConfig.directory.shield, team.shield);
-
-            const shieldFileExists = await fs.promises.stat(teamShieldFilePath);
-
-            if (shieldFileExists) {
-                await fs.promises.unlink(teamShieldFilePath);
-            }
+            await this.storageProvider.deleteFile(team.shield)
         }
-        team.shield = shieldFileName;
+        const filename = await this.storageProvider.saveFile(shieldFileName);
+
+        team.shield = filename;
 
         await this.teamsRepository.save(team);
 

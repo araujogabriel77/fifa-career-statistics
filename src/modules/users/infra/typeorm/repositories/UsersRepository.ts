@@ -23,7 +23,7 @@ class UserRepository implements IUsersRepository {
             where: { email }
         });
 
-        return findUserWithSameEmail || null;
+        return findUserWithSameEmail;
     }
 
     public async create(userData: ICreateUserDTO): Promise<User> {

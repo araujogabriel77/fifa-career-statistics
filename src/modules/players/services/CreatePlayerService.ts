@@ -18,6 +18,7 @@ interface IRequest {
     goals?: number;
     assists?: number;
     clean_sheets?: number;
+    bio?: string;
     team_id: number;
 }
 

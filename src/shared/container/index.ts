@@ -1,6 +1,7 @@
 import { container } from 'tsyringe';
 
 import '@modules/users/providers';
+import './providers';
 
 import ITeamsRepository from '@modules/teams/repositories/ITeamsRepository';
 import TeamsRepository from '@modules/teams/infra/typeorm/repositories/TeamsRepository';
