@@ -14,7 +14,7 @@ const app = express();
 
 
 app.use(express.json());
-app.use('/files', express.static(uploadConfig.directory.root));
+app.use('/files', express.static(uploadConfig.tmpFolder));
 app.use(routes);
 
 app.use((err: Error, request: Request, response: Response, next: NextFunction) => {

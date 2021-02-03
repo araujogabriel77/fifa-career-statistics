@@ -2,7 +2,7 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
 
 import User from '../../infra/typeorm/entities/User';
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 
 class FakeUserRepository implements IUsersRepository {
     private users: User[] = [];
@@ -22,7 +22,7 @@ class FakeUserRepository implements IUsersRepository {
     public async create(userData: ICreateUserDTO): Promise<User> {
         const user = new User();
 
-        Object.assign(user, { id: uuid() }, userData);
+        Object.assign(user, { id: v4() }, userData);
 
         this.users.push(user);
 
