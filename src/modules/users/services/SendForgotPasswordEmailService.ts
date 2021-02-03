@@ -6,11 +6,9 @@ import IMailProvider from '@shared/container/providers/MailProvider/models/IMail
 import IUserTokensRepository from '../repositories/fakes/FakeUserTokensRepository';
 
 import AppError from '@shared/errors/AppErrors';
-import validateUserFormFields from '../utils/validateUserFormFields';
 interface IRequest {
     email: string;
 }
-
 @injectable()
 class SendForgotEmailService {
     constructor(
@@ -33,7 +31,7 @@ class SendForgotEmailService {
 
         await this.userTokensRepository.generate(user.id);
 
-        this.mailProvider.sendMail(
+        await this.mailProvider.sendMail(
             email,
             'Pedido de recuperação de senha recebido'
         );

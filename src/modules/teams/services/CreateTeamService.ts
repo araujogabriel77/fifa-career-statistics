@@ -2,6 +2,7 @@ import { injectable, inject } from 'tsyringe';
 
 import Team from '@modules/teams/infra/typeorm/entities/Team';
 import ITeamsRepository from '../repositories/ITeamsRepository';
+import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 
 import AppError from '@shared/errors/AppErrors';
 import validateTeamFormFields from '@modules/teams/utils/validateTeamFormFields';
@@ -19,7 +20,10 @@ interface IRequest {
 class CreateTeamService {
     constructor(
         @inject('TeamsRepository')
-        private teamsRepository: ITeamsRepository
+        private teamsRepository: ITeamsRepository,
+
+        @inject('StorageProvider')
+        private storageProvider: IStorageProvider
     ) { }
     public async execute({
         name,
@@ -36,6 +40,8 @@ class CreateTeamService {
         if (findTeamWithSameName) {
             throw new AppError('This name is already in use');
         }
+
+        const filename = await this.storageProvider.saveFile(shieldFileName);
 
         const invalidFormFields = validateTeamFormFields({
             name,
@@ -58,7 +64,7 @@ class CreateTeamService {
             country,
             foundation,
             user_id,
-            shield: shieldFileName
+            shield: filename
         });
 
         return team;

@@ -4,11 +4,6 @@ import { container } from 'tsyringe';
 import TeamsRepository from '@modules/teams/infra/typeorm/repositories/TeamsRepository';
 import CreateTeamService from '@modules/teams/services/CreateTeamService';
 import UpdateTeamService from '@modules/teams/services/UpdateTeamService';
-import UpdateTeamShieldService from '@modules/teams/services/UpdateTeamShieldService';
-
-
-
-
 export default class TeamsController {
     public async create(request: Request, response: Response): Promise<Response> {
         try {
@@ -68,21 +63,6 @@ export default class TeamsController {
         try {
             const teamsRepository = new TeamsRepository();
             const teams = await teamsRepository.findAll();
-
-            return response.json(teams);
-        } catch (error) {
-            return response.json({ error: error.message });
-        }
-    }
-
-    public async listByCountry(request: Request, response: Response): Promise<Response> {
-        try {
-            const teamsRepository = new TeamsRepository();
-            const { country } = request.params;
-
-            const formated_country = country.toLowerCase();
-
-            const teams = await teamsRepository.findByCountry(formated_country)
 
             return response.json(teams);
         } catch (error) {

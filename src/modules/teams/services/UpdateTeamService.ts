@@ -32,11 +32,26 @@ class updateUserAvatarService {
         if (!team) {
             throw new AppError('Team not found', 401);
         }
+        console.log(
+            team_id,
+            name,
+            short_name,
+            country,
+            foundation
+        );
 
-        team.name = name.length < 3 ? team.name : name.toLowerCase();
-        team.short_name = short_name.length < 3 || undefined ? team.short_name : short_name.toLowerCase();
-        team.country = country.length < 1 ? team.country : country.toLowerCase();
-        team.foundation = foundation.length < 4 ? team.foundation : foundation;
+        if (name) {
+            team.name = name.length < 3 ? team.name : name.toLowerCase();
+        }
+        if (short_name) {
+            team.short_name = short_name.length < 3 || undefined ? team.short_name : short_name.toLowerCase();
+        }
+        if (country) {
+            team.country = country.length < 1 ? team.country : country.toLowerCase();
+        }
+        if (foundation) {
+            team.foundation = foundation.length < 4 ? team.foundation : foundation;
+        }
 
         await this.teamsRepository.save(team);
 
