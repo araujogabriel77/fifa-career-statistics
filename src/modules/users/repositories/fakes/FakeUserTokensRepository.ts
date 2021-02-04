@@ -17,6 +17,7 @@ class FakeUserTokensRepository implements IUserTokensRepository {
             updatade_at: new Date()
         });
 
+
         this.userTokens.push(userToken);
 
         return userToken;
