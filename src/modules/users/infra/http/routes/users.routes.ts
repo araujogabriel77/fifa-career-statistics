@@ -5,7 +5,7 @@ import UsersController from '../controllers/UsersController';
 import UsersAvatarController from '../controllers/UserAvatarController';
 
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
-import uploadConfig from '@config/uploadAvatar';
+import uploadConfig from '@config/upload';
 
 const usersController = new UsersController();
 const userAvatarController = new UsersAvatarController();

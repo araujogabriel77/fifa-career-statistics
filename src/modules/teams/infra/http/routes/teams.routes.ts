@@ -6,7 +6,7 @@ import TeamsCountryController from '../controllers/TeamsCountryController';
 import TeamShieldController from '../controllers/TeamShieldController';
 
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
-import uploadConfig from '@config/uploadAvatar';
+import uploadConfig from '@config/upload';
 
 const teamsController = new TeamsController();
 const teamsCountryController = new TeamsCountryController();

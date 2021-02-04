@@ -2,16 +2,24 @@ import 'reflect-metadata';
 import { v4 } from 'uuid';
 
 import FakeTeamsRepository from '../repositories/fakes/FakeTeamsRepository';
+import FakeStorageProvider from '@shared/container/providers/StorageProvider/fakes/FakeStorageProvider';
 import CreateTeamService from './CreateTeamService';
 
 import randomString from '../utils/randomString';
 import AppError from '@shared/errors/AppErrors';
 
-describe('CreateTeam', () => {
-    it('should be able to create a new team', async () => {
-        const fakeTeamsRepository = new FakeTeamsRepository();
-        const createTeam = new CreateTeamService(fakeTeamsRepository);
+let fakeTeamsRepository: FakeTeamsRepository;
+let fakeStorageProvider: FakeStorageProvider;
+let createTeam: CreateTeamService;
 
+describe('CreateTeam', () => {
+    beforeEach(() => {
+        fakeTeamsRepository = new FakeTeamsRepository();
+        fakeStorageProvider = new FakeStorageProvider();
+        createTeam = new CreateTeamService(fakeTeamsRepository, fakeStorageProvider);
+    });
+
+    it('should be able to create a new team', async () => {
         const team = await createTeam.execute({
             name: randomString(8),
             short_name: randomString(3),
@@ -25,9 +33,6 @@ describe('CreateTeam', () => {
     });
 
     it('should not be able to create a team with same name', async () => {
-        const fakeTeamsRepository = new FakeTeamsRepository();
-        const createTeam = new CreateTeamService(fakeTeamsRepository);
-
         const createdTeam = await createTeam.execute({
             name: 'Manchester United',
             short_name: randomString(3),
@@ -36,7 +41,7 @@ describe('CreateTeam', () => {
             user_id: v4()
         });
 
-        expect(
+        await expect(
             createTeam.execute({
                 name: createdTeam.name,
                 short_name: randomString(3),
@@ -48,10 +53,7 @@ describe('CreateTeam', () => {
     });
 
     it('should not be able to create a team with invalid characters size', async () => {
-        const fakeTeamsRepository = new FakeTeamsRepository();
-        const createTeam = new CreateTeamService(fakeTeamsRepository);
-
-        expect(
+        await expect(
             createTeam.execute({
                 name: randomString(2),
                 short_name: randomString(4),

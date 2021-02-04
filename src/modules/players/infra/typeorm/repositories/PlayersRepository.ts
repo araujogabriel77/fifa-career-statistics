@@ -57,27 +57,36 @@ class PlayerRepository implements IPlayersRepository {
     }
 
     public async findByCountry(country: string): Promise<Player[] | undefined> {
-        const findPlayerWithSameCountry = await this.ormRepository.find({
-            where: { country }
+        const formated_country = country.toLowerCase();
+        const findPlayersByCountry = await this.ormRepository.find({
+            where: { country: formated_country }
         });
 
-        return findPlayerWithSameCountry;
+        return findPlayersByCountry;
     }
 
     public async findByName(name: string): Promise<Player | undefined> {
-        const findPlayerWithSameName = await this.ormRepository.findOne({
+        const findPlayerByName = await this.ormRepository.findOne({
             where: { name }
         });
 
-        return findPlayerWithSameName;
+        return findPlayerByName;
+    }
+
+    public async findById(id: number): Promise<Player | undefined> {
+        const findPlayerById = await this.ormRepository.findOne({
+            where: { id }
+        });
+
+        return findPlayerById;
     }
 
     public async findPlayerByTeam(team_id: number): Promise<Player[] | undefined> {
-        const findPlayersInTheSameTeam = await this.ormRepository.find({
+        const findPlayersByTeam = await this.ormRepository.find({
             where: { team_id }
         });
 
-        return findPlayersInTheSameTeam;
+        return findPlayersByTeam;
     }
 
 }

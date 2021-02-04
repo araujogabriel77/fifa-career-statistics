@@ -19,18 +19,18 @@ export default function validateFormFields({
     games_played,
     goals,
     assists,
-    clean_sheets
+    clean_sheets,
 }: FormFields): string | null {
 
-    if (name.length < 3) {
+    if (name.length < 3 || name === undefined) {
         return 'Player name must have at least 3 characters';
     }
 
-    if (country.length < 3) {
+    if (country.length < 3 || country === undefined) {
         return 'Country name must have at least 3 characters';
     }
 
-    if (position.length > 3 || position.length < 2) {
+    if (position.length > 3 || position.length < 2 || position === undefined) {
         return 'Position must have beetwen 2 and 3 characters';
     }
 
@@ -38,7 +38,7 @@ export default function validateFormFields({
         return 'Overall number must be beetwen 1 and 99';
     }
 
-    if (current_overall < 1 || first_overall > 99) {
+    if (current_overall < 1 || current_overall > 99) {
         return 'Overall number must be beetwen 1 and 99';
     }
 
@@ -55,7 +55,7 @@ export default function validateFormFields({
     }
 
     if (clean_sheets < 0) {
-        return 'Clean_sheets cannot be negative';
+        return 'Clean sheets cannot be negative';
     }
 
     return null;

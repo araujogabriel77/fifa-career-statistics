@@ -4,7 +4,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
 
 import routes from '@shared/infra/http/routes';
-import uploadConfig from '@config/uploadAvatar';
+import uploadConfig from '@config/upload';
 import AppError from '@shared/errors/AppErrors';
 
 import '@shared/infra/typeorm';

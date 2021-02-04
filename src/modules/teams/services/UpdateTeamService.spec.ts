@@ -2,22 +2,29 @@ import 'reflect-metadata';
 import { v4 } from 'uuid';
 
 import FakeTeamsRepository from '../repositories/fakes/FakeTeamsRepository';
+import FakeStorageProvider from '@shared/container/providers/StorageProvider/fakes/FakeStorageProvider';
 import UpdateTeamService from './UpdateTeamService';
 import CreateTeamService from './CreateTeamService';
 
 import randomString from '../utils/randomString';
 import AppError from '@shared/errors/AppErrors';
 
+let fakeTeamsRepository: FakeTeamsRepository;
+let fakeStorageProvider: FakeStorageProvider;
+let createTeam: CreateTeamService;
+let updateTeam: UpdateTeamService;
+
 describe('UpdateTeam', () => {
+    beforeEach(() => {
+        fakeTeamsRepository = new FakeTeamsRepository();
+        fakeStorageProvider = new FakeStorageProvider();
+        createTeam = new CreateTeamService(fakeTeamsRepository, fakeStorageProvider);
+        updateTeam = new UpdateTeamService(fakeTeamsRepository, fakeStorageProvider);
+    });
+
     it('should be able to update a team', async () => {
-        const fakeTeamsRepository = new FakeTeamsRepository();
-        const createTeam = new CreateTeamService(fakeTeamsRepository);
-        const updateTeam = new UpdateTeamService(fakeTeamsRepository);
-
-        const teamName = 'Flamengo';
-
         const team = await createTeam.execute({
-            name: teamName,
+            name: 'Flamengo',
             short_name: 'FLA',
             country: 'França',
             foundation: '1795',
@@ -41,12 +48,7 @@ describe('UpdateTeam', () => {
     });
 
     it('should not be able to update a team', async () => {
-        const fakeTeamsRepository = new FakeTeamsRepository();
-        const createTeam = new CreateTeamService(fakeTeamsRepository);
-        const updateTeam = new UpdateTeamService(fakeTeamsRepository);
-
         const teamName = 'Flamengo';
-
         const team = await createTeam.execute({
             name: teamName,
             short_name: 'FLA',
@@ -57,7 +59,7 @@ describe('UpdateTeam', () => {
 
         const team_id = (team.id + 1).toString();
 
-        expect(
+        await expect(
             updateTeam.execute({
                 team_id,
                 name: teamName,

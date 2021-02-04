@@ -3,22 +3,26 @@ import { v4 } from 'uuid';
 
 import FakeStorageProvider from '@shared/container/providers/StorageProvider/fakes/FakeStorageProvider';
 import FakeTeamsRepository from '../repositories/fakes/FakeTeamsRepository';
-import UpdateTeamShieldService from './UpdateTeamShieldService';
 import CreateTeamService from './CreateTeamService';
+import UpdateTeamShieldService from './UpdateTeamShieldService';
 
 import randomString from '../utils/randomString';
 import AppError from '@shared/errors/AppErrors';
 
-describe('UpdateTeam', () => {
-    it('should be able to update a team shield', async () => {
-        const fakeTeamsRepository = new FakeTeamsRepository();
-        const fakeStorageProvider = new FakeStorageProvider();
-        const createTeam = new CreateTeamService(fakeTeamsRepository);
-        const updateTeam = new UpdateTeamShieldService(
-            fakeTeamsRepository,
-            fakeStorageProvider
-        );
+let fakeTeamsRepository: FakeTeamsRepository;
+let fakeStorageProvider: FakeStorageProvider;
+let createTeam: CreateTeamService;
+let updateTeamShieldService: UpdateTeamShieldService;
 
+describe('UpdateTeamShield', () => {
+    beforeEach(() => {
+        fakeTeamsRepository = new FakeTeamsRepository();
+        fakeStorageProvider = new FakeStorageProvider();
+        createTeam = new CreateTeamService(fakeTeamsRepository, fakeStorageProvider);
+        updateTeamShieldService = new UpdateTeamShieldService(fakeTeamsRepository, fakeStorageProvider);
+    });
+
+    it('should be able to update a team shield', async () => {
         const team = await createTeam.execute({
             name: randomString(10),
             short_name: randomString(3),
@@ -30,7 +34,7 @@ describe('UpdateTeam', () => {
         const team_id = team.id.toString();
         const shieldFileName = 'gato.png';
 
-        await updateTeam.execute({
+        await updateTeamShieldService.execute({
             team_id,
             shieldFileName
         });
@@ -39,14 +43,6 @@ describe('UpdateTeam', () => {
     });
 
     it('should be able to update a existent team shield', async () => {
-        const fakeTeamsRepository = new FakeTeamsRepository();
-        const fakeStorageProvider = new FakeStorageProvider();
-        const createTeam = new CreateTeamService(fakeTeamsRepository);
-        const updateTeam = new UpdateTeamShieldService(
-            fakeTeamsRepository,
-            fakeStorageProvider
-        );
-
         const team = await createTeam.execute({
             name: randomString(10),
             short_name: randomString(3),
@@ -59,7 +55,7 @@ describe('UpdateTeam', () => {
         const team_id = team.id.toString();
         const deleteFile = jest.spyOn(fakeStorageProvider, 'deleteFile');
 
-        await updateTeam.execute({
+        await updateTeamShieldService.execute({
             team_id,
             shieldFileName: 'cachorro.png'
         });
@@ -69,14 +65,6 @@ describe('UpdateTeam', () => {
     });
 
     it('should not be able to update a team shield with different user id', async () => {
-        const fakeTeamsRepository = new FakeTeamsRepository();
-        const fakeStorageProvider = new FakeStorageProvider();
-        const createTeam = new CreateTeamService(fakeTeamsRepository);
-        const updateTeam = new UpdateTeamShieldService(
-            fakeTeamsRepository,
-            fakeStorageProvider
-        );
-
         const team = await createTeam.execute({
             name: randomString(10),
             short_name: randomString(3),
@@ -88,7 +76,7 @@ describe('UpdateTeam', () => {
 
         const team_id = (team.id + 1).toString();
 
-        expect(updateTeam.execute({
+        await expect(updateTeamShieldService.execute({
             team_id,
             shieldFileName: 'gato.png'
         })).rejects.toBeInstanceOf(AppError);
