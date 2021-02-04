@@ -19,7 +19,7 @@ describe('UpdateTeam', () => {
         fakeTeamsRepository = new FakeTeamsRepository();
         fakeStorageProvider = new FakeStorageProvider();
         createTeam = new CreateTeamService(fakeTeamsRepository, fakeStorageProvider);
-        updateTeam = new UpdateTeamService(fakeTeamsRepository, fakeStorageProvider);
+        updateTeam = new UpdateTeamService(fakeTeamsRepository);
     });
 
     it('should be able to update a team', async () => {
@@ -36,7 +36,6 @@ describe('UpdateTeam', () => {
         const updated_team = await updateTeam.execute({
             team_id,
             name: 'Clube de Regatas Flamengo',
-            short_name: '',
             country: 'Brasil',
             foundation: '1895',
         });
@@ -47,22 +46,42 @@ describe('UpdateTeam', () => {
         expect(updated_team.short_name).toBe('fla');
     });
 
-    it('should not be able to update a team', async () => {
-        const teamName = 'Flamengo';
+    it('should not be able to update a team with invalid form fields', async () => {
         const team = await createTeam.execute({
-            name: teamName,
+            name: 'Flamengo',
+            short_name: 'FLA',
+            country: 'França',
+            foundation: '1795',
+            user_id: v4()
+        });
+
+        const team_id = team.id.toString();
+
+        await expect(
+            updateTeam.execute({
+                team_id,
+                name: 'C',
+                country: 'Brasil',
+                foundation: '1895',
+            })
+        ).rejects.toBeInstanceOf(AppError);
+    });
+
+    it('should not be able to update a inexistent team', async () => {
+        const team = await createTeam.execute({
+            name: 'Flamengo',
             short_name: 'FLA',
             country: 'Brasil',
             foundation: '1795',
             user_id: v4()
         });
 
-        const team_id = (team.id + 1).toString();
+        const team_id = (team.id + 500000).toString();
 
         await expect(
             updateTeam.execute({
                 team_id,
-                name: teamName,
+                name: 'Flamengo',
                 short_name: randomString(3),
                 country: randomString(7),
                 foundation: '1895',

@@ -71,6 +71,11 @@ class PlayerRepository implements IPlayersRepository {
         return findPlayersInTheSameTeam;
     }
 
+    public async findById(id: number): Promise<Player | undefined> {
+        const playerIndex = this.players.findIndex(player => player.id === id);
+
+        return this.players[playerIndex];
+    }
 }
 
 export default PlayerRepository;

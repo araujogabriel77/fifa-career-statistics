@@ -1,9 +1,9 @@
 import { injectable, inject } from 'tsyringe';
 
 import ITeamsRepository from '../repositories/ITeamsRepository';
-import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import Team from '@modules/teams/infra/typeorm/entities/Team';
 import AppError from '@shared/errors/AppErrors';
+import validateUpdateTeamFields from '../utils/validateUpdateTeamFields';
 
 interface Request {
     team_id: string;
@@ -18,9 +18,6 @@ class updateUserAvatarService {
     constructor(
         @inject('TeamsRepository')
         private teamsRepository: ITeamsRepository,
-
-        @inject('StorageProvider')
-        private storageProvider: IStorageProvider
     ) { }
     public async execute({
         team_id,
@@ -36,10 +33,22 @@ class updateUserAvatarService {
         if (!team) {
             throw new AppError('Team not found', 401);
         }
-        team.name = name.length < 3 || undefined ? team.name : name.toLowerCase();
-        team.short_name = short_name.length < 3 || undefined ? team.short_name : short_name.toLowerCase();
-        team.country = country.length < 1 || undefined ? team.country : country.toLowerCase();
-        team.foundation = foundation.length < 4 || undefined ? team.foundation : foundation;
+
+        const validFields = validateUpdateTeamFields({
+            name,
+            short_name,
+            country,
+            foundation
+        });
+
+        if (validFields) {
+            throw new AppError(validFields);
+        }
+
+        team.name = name === undefined ? team.name : name.toLowerCase();
+        team.short_name = short_name === undefined ? team.short_name : short_name.toLowerCase();
+        team.country = country === undefined ? team.country : country.toLowerCase();
+        team.foundation = foundation === undefined ? team.foundation : foundation;
 
         await this.teamsRepository.save(team);
 
