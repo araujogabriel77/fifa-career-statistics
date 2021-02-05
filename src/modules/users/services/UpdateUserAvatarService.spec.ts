@@ -3,19 +3,22 @@ import 'reflect-metadata';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import FakeStorageProvider from '@shared/container/providers/StorageProvider/fakes/FakeStorageProvider';
 import UpdateUserAvatarService from './UpdateUserAvatarService';
-
-import randomString from '../utils/randomString';
 import AppError from '@shared/errors/AppErrors';
 
+let fakeUsersRepository: FakeUsersRepository;
+let fakeStorageProvider: FakeStorageProvider;
+let updateUserAvatar: UpdateUserAvatarService;
+
 describe('UpdateUserAvatar', () => {
-    it('should be able to update a user avatar', async () => {
-        const fakeUsersRepository = new FakeUsersRepository();
-        const fakeStorageProvider = new FakeStorageProvider();
-        const updateUserAvatar = new UpdateUserAvatarService(
+    beforeEach(() => {
+        fakeUsersRepository = new FakeUsersRepository();
+        fakeStorageProvider = new FakeStorageProvider();
+        updateUserAvatar = new UpdateUserAvatarService(
             fakeUsersRepository,
             fakeStorageProvider
         );
-
+    });
+    it('should be able to update a user avatar', async () => {
         const user = await fakeUsersRepository.create({
             name: 'jacare',
             email: 'jacare@gmail.com',
@@ -33,13 +36,6 @@ describe('UpdateUserAvatar', () => {
     });
 
     it('should be able to update a existent avatar', async () => {
-        const fakeUsersRepository = new FakeUsersRepository();
-        const fakeStorageProvider = new FakeStorageProvider();
-        const updateUserAvatar = new UpdateUserAvatarService(
-            fakeUsersRepository,
-            fakeStorageProvider
-        );
-
         const user = await fakeUsersRepository.create({
             name: 'jacare',
             email: 'jacare@gmail.com',
@@ -60,16 +56,9 @@ describe('UpdateUserAvatar', () => {
     });
 
     it('should not be able to update avatar from non existent user', async () => {
-        const fakeUsersRepository = new FakeUsersRepository();
-        const fakeStorageProvider = new FakeStorageProvider();
-        const updateUserAvatar = new UpdateUserAvatarService(
-            fakeUsersRepository,
-            fakeStorageProvider
-        );
-
         const avatarFileName = 'jacaronga.png';
 
-        expect(updateUserAvatar.execute({
+        await expect(updateUserAvatar.execute({
             user_id: 'blablabla-no',
             avatarFileName
         })

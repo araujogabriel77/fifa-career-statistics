@@ -7,12 +7,19 @@ import CreateUserService from './CreateUserService';
 import randomString from '../utils/randomString';
 import AppError from '@shared/errors/AppErrors';
 
-describe('CreateUser', () => {
-    it('should be able to create a new user', async () => {
-        const fakeUsersRepository = new FakeUsersRepository();
-        const fakeHashProvider = new FakeHashProvider();
-        const createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
+let fakeUsersRepository: FakeUsersRepository;
+let fakeHashProvider: FakeHashProvider;
+let createUser: CreateUserService;
 
+
+describe('CreateUser', () => {
+    beforeEach(() => {
+        fakeUsersRepository = new FakeUsersRepository();
+        fakeHashProvider = new FakeHashProvider();
+        createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
+    })
+
+    it('should be able to create a new user', async () => {
         const userName = randomString(6);
 
         const user = await createUser.execute({
@@ -26,17 +33,13 @@ describe('CreateUser', () => {
     });
 
     it('should not be able to create a user with same email', async () => {
-        const fakeUsersRepository = new FakeUsersRepository();
-        const fakeHashProvider = new FakeHashProvider();
-        const createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
-
         const user = await createUser.execute({
             name: 'user',
             email: 'user@gmail.com',
             password: randomString(8)
         });
 
-        expect(createUser.execute({
+        await expect(createUser.execute({
             name: user.name,
             email: user.email,
             password: randomString(8)
@@ -45,11 +48,7 @@ describe('CreateUser', () => {
     });
 
     it('should not be able to create a user with invalid characters size', async () => {
-        const fakeUsersRepository = new FakeUsersRepository();
-        const fakeHashProvider = new FakeHashProvider();
-        const createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
-
-        expect(createUser.execute({
+        await expect(createUser.execute({
             name: randomString(2),
             email: randomString(3),
             password: randomString(2)

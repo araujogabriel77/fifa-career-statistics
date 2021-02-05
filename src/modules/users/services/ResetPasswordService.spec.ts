@@ -24,7 +24,6 @@ describe('ResetPasswordEmail', () => {
         );
     });
 
-    //FIXME: retornando erro "token expired"
     it('should be able to reset the password', async () => {
         const user = await fakeUsersRepository.create({
             name: 'jaca',
