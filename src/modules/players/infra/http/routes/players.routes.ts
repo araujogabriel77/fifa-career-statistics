@@ -27,6 +27,6 @@ playersRouter.get('/:country', playersByCountryController.index);
 playersRouter.post('/', ensureAuthenticated, playersController.create);
 
 // rota de atualização de jogadores
-playersRouter.patch('/:id', ensureAuthenticated, playersController.update)
+playersRouter.put('/:id', ensureAuthenticated, playersController.update)
 
 export default playersRouter;

@@ -16,21 +16,17 @@ const upload = multer(uploadConfig);
 
 teamsRouter.use(ensureAuthenticated);
 
-//GET
 teamsRouter.get('/', teamsController.index);
 
 teamsRouter.get('/:country', teamsCountryController.index);
 
-//POST
 teamsRouter.post('/', upload.single('shield'), teamsController.create);
 
-//PATCH
-//FIXME:
-teamsRouter.patch('/update/:id', teamsController.update);
+teamsRouter.put('/update/:id', teamsController.update);
 
-teamsRouter.patch(
-    '/update/:id/shield',
-    upload.single('avatar'),
+teamsRouter.post(
+    '/update/shield/:id',
+    upload.single('shield'),
     teamShieldController.update
 );
 

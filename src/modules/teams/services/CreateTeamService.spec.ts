@@ -33,7 +33,7 @@ describe('CreateTeam', () => {
     });
 
     it('should not be able to create a team with same name', async () => {
-        const createdTeam = await createTeam.execute({
+        await createTeam.execute({
             name: 'Manchester United',
             short_name: randomString(3),
             country: randomString(7),
@@ -43,7 +43,7 @@ describe('CreateTeam', () => {
 
         await expect(
             createTeam.execute({
-                name: createdTeam.name,
+                name: 'manchester united',
                 short_name: randomString(3),
                 country: randomString(7),
                 foundation: '1898',
