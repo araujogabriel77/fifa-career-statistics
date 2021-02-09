@@ -16,21 +16,21 @@ import IPlayersRepository from '@modules/players/repositories/IPlayersRepository
 import PlayersRepository from '@modules/players/infra/typeorm/repositories/PlayersRepository';
 
 container.registerSingleton<IUsersRepository>(
-    'UsersRepository',
-    UsersRepository
+  'UsersRepository',
+  UsersRepository
 );
 
 container.registerSingleton<ITeamsRepository>(
-    'TeamsRepository',
-    TeamsRepository
+  'TeamsRepository',
+  TeamsRepository
 );
 
 container.registerSingleton<IPlayersRepository>(
-    'PlayersRepository',
-    PlayersRepository
+  'PlayersRepository',
+  PlayersRepository
 );
 
 container.registerSingleton<IUserTokensRepository>(
-    'UserTokensRepository',
-    UserTokensRepository
+  'UserTokensRepository',
+  UserTokensRepository
 );

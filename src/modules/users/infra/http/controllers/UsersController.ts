@@ -1,31 +1,30 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import CreateUserService from '@modules/users/services/CreateUserService';
 
 export default class UsersController {
-    public async create(request: Request, response: Response): Promise<Response> {
-        try {
-            const {
-                name,
-                password,
-                email
-            } = request.body;
+  public async create(request: Request, response: Response): Promise<Response> {
+    try {
+      const {
+        name,
+        password,
+        email
+      } = request.body;
 
-            const createUser = container.resolve(CreateUserService);
+      const createUser = container.resolve(CreateUserService);
 
-            const user = await createUser.execute({
-                name,
-                password,
-                email
-            });
+      const user = await createUser.execute({
+        name,
+        password,
+        email
+      });
 
-            delete user.password;
+      return response.json(classToClass(user));
 
-            return response.json(user);
-
-        } catch (error) {
-            return response.status(400).json({ error: error.message });
-        }
+    } catch (error) {
+      return response.status(400).json({ error: error.message });
     }
+  }
 }
