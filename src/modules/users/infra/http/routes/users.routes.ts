@@ -12,7 +12,7 @@ const usersController = new UsersController();
 const userAvatarController = new UsersAvatarController();
 
 const usersRouter = Router();
-const upload = multer(uploadConfig);
+const upload = multer(uploadConfig.multer);
 
 usersRouter.post('/', celebrate({
   [Segments.BODY]: {
