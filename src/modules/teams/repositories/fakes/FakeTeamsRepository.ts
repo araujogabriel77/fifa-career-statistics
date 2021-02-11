@@ -4,62 +4,68 @@ import ICreateTeamDTO from '@modules/teams/dtos/ICreateTeamDTO';
 import Team from '@modules/teams/infra/typeorm/entities/Team';
 
 class TeamRepository implements ITeamsRepository {
-    private teams: Team[] = [];
+  private teams: Team[] = [];
 
-    public async create({
-        name,
-        short_name,
-        country,
-        foundation,
-        shield,
-        user_id
-    }: Omit<ICreateTeamDTO, 'id'>): Promise<Team> {
-        const team = new Team();
+  public async create({
+    name,
+    short_name,
+    country,
+    foundation,
+    shield,
+    user_id
+  }: Omit<ICreateTeamDTO, 'id'>): Promise<Team> {
+    const team = new Team();
 
-        Object.assign(team, {
-            id: Math.round(Math.random() * (200 - 10) + 10),
-            name,
-            short_name,
-            country,
-            foundation,
-            shield,
-            user_id
-        });
+    Object.assign(team, {
+      id: Math.round(Math.random() * (200 - 10) + 10),
+      name,
+      short_name,
+      country,
+      foundation,
+      shield,
+      user_id
+    });
 
-        this.teams.push(team);
+    this.teams.push(team);
 
-        return team;
-    }
+    return team;
+  }
 
-    public async save(team: Team): Promise<Team> {
-        const teamIndex = this.teams.findIndex(findTeam => findTeam.id === team.id);
+  public async save(team: Team): Promise<Team> {
+    const teamIndex = this.teams.findIndex(findTeam => findTeam.id === team.id);
 
-        this.teams[teamIndex] = team;
+    this.teams[teamIndex] = team;
 
-        return team;
-    }
+    return team;
+  }
 
-    public async findAll(): Promise<Team[] | undefined> {
-        return this.teams;
-    }
+  public async findAll(): Promise<Team[] | undefined> {
+    return this.teams;
+  }
 
-    public async findByCountry(country: string): Promise<Team[] | undefined> {
-        const teams = this.teams.filter(team => team.country === country);
+  public async findByCountry(country: string): Promise<Team[] | undefined> {
+    const teams = this.teams.filter(team => team.country === country);
 
-        return teams;
-    }
+    return teams;
+  }
 
-    public async findByName(name: string): Promise<Team | undefined> {
-        const team = this.teams.find(team => team.name === name);
+  public async findByName(name: string): Promise<Team | undefined> {
+    const team = this.teams.find(team => team.name === name);
 
-        return team;
-    }
+    return team;
+  }
 
-    public async findById(id: number): Promise<Team | undefined> {
-        const team = this.teams.find(team => team.id === id);
+  public async findById(id: number): Promise<Team | undefined> {
+    const team = this.teams.find(team => team.id === id);
 
-        return team;
-    }
+    return team;
+  }
+
+  public async findByUserId(user_id: string): Promise<Team[] | undefined> {
+    const teams = this.teams.filter(team => team.user_id === user_id);
+
+    return teams;
+  }
 }
 
 export default TeamRepository;

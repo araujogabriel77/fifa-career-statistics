@@ -28,7 +28,12 @@ export default class TeamsController {
       } = request.body;
 
       const user_id = request.user.id;
-      const shield = request.file.filename;
+
+      // let shield = null;
+
+      // if (request.file.filename) {
+      //   shield = request.file.filename;
+      // }
 
       const team = await createTeam.execute({
         name,
@@ -36,7 +41,7 @@ export default class TeamsController {
         country,
         foundation,
         user_id,
-        shieldFileName: shield
+        // shieldFileName
       });
 
       return response.json(team);

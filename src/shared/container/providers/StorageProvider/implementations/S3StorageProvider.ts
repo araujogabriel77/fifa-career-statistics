@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import mime from 'mime';
+import mime from 'mime'
 import aws, { S3 } from 'aws-sdk';
 
 import uploadConfig from '@config/upload';
@@ -19,6 +19,7 @@ class DiskStorageProvider implements IStorageProvider {
 
     const fileContent = await fs.promises.readFile(originalPath);
 
+    //
     const ContentType = mime.getType(originalPath);
 
     if (!ContentType) {

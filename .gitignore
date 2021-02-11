@@ -24,7 +24,7 @@ ormconfig.json
 tmp/
 tmp/*
 !tmp/.
-todo
+.todo
 
 # Coverage reports
 coverage
