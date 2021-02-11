@@ -36,14 +36,7 @@ describe('UpdatePlayer', () => {
     expect(player.position).toBe('ata');
   });
 
-  it('should be able to update a player that does not exist', async () => {
-    const player = await createPlayer.execute({
-      name: 'Joca',
-      country: 'Brasil',
-      position: 'MEI',
-      team_id: 1
-    });
-
+  it('should not be able to update a player that does not exist', async () => {
     await expect(
       updatePlayer.execute({
         id: '89875454654asd',
