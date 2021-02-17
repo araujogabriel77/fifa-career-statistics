@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { v4 } from 'uuid';
 
 import FakeTeamsRepository from '../repositories/fakes/FakeTeamsRepository';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import FakeStorageProvider from '@shared/container/providers/StorageProvider/fakes/FakeStorageProvider';
 import CreateTeamService from './CreateTeamService';
 
@@ -10,13 +11,18 @@ import AppError from '@shared/errors/AppErrors';
 
 let fakeTeamsRepository: FakeTeamsRepository;
 let fakeStorageProvider: FakeStorageProvider;
+let fakeCacheProvider: FakeCacheProvider;
 let createTeam: CreateTeamService;
 
 describe('CreateTeam', () => {
   beforeEach(() => {
     fakeTeamsRepository = new FakeTeamsRepository();
     fakeStorageProvider = new FakeStorageProvider();
-    createTeam = new CreateTeamService(fakeTeamsRepository, fakeStorageProvider);
+    createTeam = new CreateTeamService(
+      fakeTeamsRepository,
+      fakeStorageProvider,
+      fakeCacheProvider
+    );
   });
 
   it('should be able to create a new team', async () => {

@@ -21,15 +21,18 @@ class ListUserTeamsService {
   public async execute({
     user_id
   }: Request): Promise<Team[] | undefined> {
-    let teams = await this.cacheProvider.recover<Team[]>(`teams-list:${user_id}`);
+
+    let teams = await this.cacheProvider.recover<Team[]>(
+      `teams-list:${user_id}`
+    );
 
     if (!teams) {
+      console.log('query feita!');
+
       teams = await this.teamsRepository.findByUserId(user_id);
-
-      console.log('a query foi feita');
-
-      await this.cacheProvider.save(`teams-list:${user_id}`, teams);
     }
+
+    await this.cacheProvider.save(`teams-list:${user_id}`, teams);
 
     return teams;
   }

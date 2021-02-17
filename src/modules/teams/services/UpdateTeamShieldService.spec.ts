@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { v4 } from 'uuid';
 
 import FakeStorageProvider from '@shared/container/providers/StorageProvider/fakes/FakeStorageProvider';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import FakeTeamsRepository from '../repositories/fakes/FakeTeamsRepository';
 import CreateTeamService from './CreateTeamService';
 import UpdateTeamShieldService from './UpdateTeamShieldService';
@@ -11,6 +12,7 @@ import AppError from '@shared/errors/AppErrors';
 
 let fakeTeamsRepository: FakeTeamsRepository;
 let fakeStorageProvider: FakeStorageProvider;
+let fakeCacheProvider: FakeCacheProvider;
 let createTeam: CreateTeamService;
 let updateTeamShieldService: UpdateTeamShieldService;
 
@@ -18,7 +20,11 @@ describe('UpdateTeamShield', () => {
   beforeEach(() => {
     fakeTeamsRepository = new FakeTeamsRepository();
     fakeStorageProvider = new FakeStorageProvider();
-    createTeam = new CreateTeamService(fakeTeamsRepository, fakeStorageProvider);
+    createTeam = new CreateTeamService(
+      fakeTeamsRepository,
+      fakeStorageProvider,
+      fakeCacheProvider
+    );
     updateTeamShieldService = new UpdateTeamShieldService(fakeTeamsRepository, fakeStorageProvider);
   });
 

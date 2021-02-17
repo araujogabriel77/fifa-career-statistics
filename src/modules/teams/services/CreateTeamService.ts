@@ -36,17 +36,15 @@ class CreateTeamService {
     user_id,
     shieldFileName
   }: IRequest): Promise<Team> {
-    const formatedName = name.toLowerCase();
+    name = name.toLowerCase();
+    short_name = short_name.toLowerCase();
+    country = country.toLowerCase();
 
-    const findTeamWithSameName = await this.teamsRepository.findByName(formatedName);
+    const findTeamWithSameName = await this.teamsRepository.findByName(name);
 
     if (findTeamWithSameName) {
       throw new AppError('This name is already in use');
     }
-
-    name = name.toLowerCase();
-    short_name = short_name.toLowerCase();
-    country = country.toLowerCase();
 
     // const filename = await this.storageProvider.saveFile(shieldFileName);
 
@@ -58,7 +56,9 @@ class CreateTeamService {
       user_id
     });
 
-    await this.cacheProvider.invalidatePrefix('teams-list')
+    const jaca = await this.cacheProvider.invalidatePrefix(`teams-list`);
+
+    console.log(jaca);
 
     return team;
   }

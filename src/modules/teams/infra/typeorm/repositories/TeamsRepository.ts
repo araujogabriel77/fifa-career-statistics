@@ -73,8 +73,6 @@ class TeamRepository implements ITeamsRepository {
       where: { user_id }
     });
 
-    console.log(user_id, teams);
-
     return teams;
   }
 }
